@@ -1,10 +1,11 @@
 class Ball {
-    constructor(x, y, vx, vy, r) {
+    constructor(x, y, vx, vy, r, letter) {
         this.pos = createVector(x, y);
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
         this.color = color(random(360), 80, 50);
+        this.letter = letter;
     }
     energy() {
         return 0.5 * this.mass * sq(this.vel.mag());  // calculate when needed
@@ -25,6 +26,9 @@ class Ball {
         can.fill(this.color);
         can.strokeWeight(2);
         can.circle(this.pos.x, this.pos.y, this.r * 2);
+        can.fill("black");
+        can.noStroke();
+        can.text(this.letter, this.pos.x, this.pos.y);
         can.pop();
     }
     static wrap(n, min, max) {
@@ -103,10 +107,11 @@ class BallSketch extends Box {
         this.addChild(this.sketch);
 
         // Populate the balls array
-        this.numBalls = 10;
+        this.ballMessage = "Under Construction"
         this.ballsArray = [];
-        for (let i = 0; i < this.numBalls; i++)
-            this.ballsArray[i] = new Ball(i*40, i*40, random(-3,3), random(-1,1), random(9,12));
+        for (let i = 0; i < this.ballMessage.length; i++)
+            this.ballsArray[i] = new Ball(i*50 + 25, height / 2, 0, 0, 20, this.ballMessage.slice(i, i+1));
+        this.ballsArray[this.ballMessage.length] = new Ball(30, 30, 4, 3, 45, "!");
     }
     update() {
         // Clear canvas
