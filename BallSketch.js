@@ -85,24 +85,20 @@ class BallSketch extends Box {
         // Create and add the Heading subBox
         let arrangement = {
             direction: "LR",
-            size: 30,  // Height
+            size: 50,  // Height
             children: [
                 {
-                    textStyle: "bold",
+                    textSize: 20,
+                    color: randomColor(),
                     borderWidth: 0,
-                    text : "B a l l s  S k e t c h"  },
-                {
-                    borderWidth: 0,
-                    text : "Energy Display",
-                    size: 200                        }
+                    text : "Under Construction"  }
             ]
         }
         let heading = Box.load(arrangement);
-        this.energyDisplay = heading.children[1];
         this.addChild(heading);
         // Create and add the subBox that we will sketch on
         this.sketch = new Box();
-        this.sketch.borderWidth = 3;
+        this.sketch.borderWidth = 0;
         this.sketch.borderColor = color("grey");
         this.addChild(this.sketch);
 
@@ -131,6 +127,5 @@ class BallSketch extends Box {
             ball.show(this.sketch.can);
             totalEnergy += ball.energy();
         }
-        this.energyDisplay.text = `Total Energy: ${totalEnergy.toFixed(2)}`;
     }
 }
