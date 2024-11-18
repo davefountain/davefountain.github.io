@@ -1,10 +1,10 @@
 let ui;
 function setup() {
-    createCanvas(windowWidth-10, windowHeight-10);
+    createCanvas(windowWidth, windowHeight);
     colorMode(HSL, 360, 100, 100, 100);
     ui = new Box();
-    ui.height = windowHeight-10;
-    ui.width = windowWidth-10;
+    ui.height = windowHeight;
+    ui.width = windowWidth;
     let bs = new BallSketch();
     ui.addChild(bs);
     ui.repack();
@@ -18,9 +18,9 @@ function draw() {
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth-10, windowHeight-10);
-    ui.width = windowWidth-10;
-    ui.height = windowHeight-10;
+    resizeCanvas(windowWidth, windowHeight);
+    ui.width = windowWidth;
+    ui.height = windowHeight;
     ui.repack();
     ui.update();
     ui.show();
