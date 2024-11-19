@@ -11,20 +11,31 @@ function setup() {
                 size: 80,
                 borderWidth: 0,
                 textSize: 40,
-                text: "David Fountain"
+                textFont: "Georgia",
+                text: "David Fountain",
+                color: color("dimgray")
             },
             {
                 children: [
                     {size: 50,
-                    borderWidth: 0},
+                        borderWidth: 0,
+                        color: color("dimgray")
+                    },
                     {borderWidth: 0},
+                    {size: 30,
+                     borderWidth: 0,
+                     color: color("dimgray")
+                    },
                     new BallSketch(),
                     {size:50,
-                    borderWidth: 0}
+                    borderWidth: 0,
+                    color: color("dimgray")
+                    }
                 ]
             },
             {
                 size: 50,
+                color: color("dimgray"),
                 borderWidth: 0
             }
         ]
