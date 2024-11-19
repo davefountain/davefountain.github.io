@@ -91,7 +91,7 @@ class BallSketch extends Box {
                     textSize: 20,
                     color: randomColor(),
                     borderWidth: 0,
-                    text : "Under Construction"  }
+                    text : "Arrow of Time"  }
             ]
         }
         let heading = Box.load(arrangement);
@@ -99,11 +99,12 @@ class BallSketch extends Box {
         // Create and add the subBox that we will sketch on
         this.sketch = new Box();
         this.sketch.borderWidth = 0;
+        this.sketch.color = "ivory";
         this.sketch.borderColor = color("grey");
         this.addChild(this.sketch);
 
         // Populate the balls array
-        this.ballMessage = "Under Construction"
+        this.ballMessage = "Arrow of Time"
         this.ballsArray = [];
         for (let i = 0; i < this.ballMessage.length; i++)
             this.ballsArray[i] = new Ball(i*50 + 25, height / 2, 0, 0, 20, this.ballMessage.slice(i, i+1));

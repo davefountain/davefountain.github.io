@@ -2,11 +2,34 @@ let ui;
 function setup() {
     createCanvas(windowWidth, windowHeight);
     colorMode(HSL, 360, 100, 100, 100);
-    ui = new Box();
-    ui.height = windowHeight;
-    ui.width = windowWidth;
-    let bs = new BallSketch();
-    ui.addChild(bs);
+    let arrangement = {
+        direction: "TB",
+        height: windowHeight,
+        width: windowWidth,
+        children: [
+            {
+                size: 80,
+                borderWidth: 0,
+                textSize: 40,
+                text: "David Fountain"
+            },
+            {
+                children: [
+                    {size: 50,
+                    borderWidth: 0},
+                    {borderWidth: 0},
+                    new BallSketch(),
+                    {size:50,
+                    borderWidth: 0}
+                ]
+            },
+            {
+                size: 50,
+                borderWidth: 0
+            }
+        ]
+    }
+    ui = Box.load(arrangement);
     ui.repack();
     ui.update();
     ui.show();
