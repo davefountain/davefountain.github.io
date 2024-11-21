@@ -21,7 +21,7 @@ function setup() {
                         borderWidth: 0,
                         color: color("dimgray")
                     },
-                    {borderWidth: 0},
+                    new ColorRaffleBox(),
                     {size: 30,
                      borderWidth: 0,
                      color: color("dimgray")
@@ -58,8 +58,4 @@ function windowResized() {
     ui.repack();
     ui.update();
     ui.show();
-}
-
-function randomColor() {
-    return color(random(360), random(100), random(100));
 }

@@ -113,6 +113,7 @@ class BallSketch extends Box {
     update() {
         // Clear canvas
         super.update();
+
         // Move every ball
         for (let ball of this.ballsArray) {
             ball.update(this.sketch.can.width, this.sketch.can.height);

@@ -205,3 +205,41 @@ class Box {
     }
 }
 
+// Color library
+function randomColor(p1 = "") {
+    let hue = random(360);
+    let sat = random(100);
+    let lum = random(100);
+    if (p1 === "pure")
+        return color(hue, 100, 50)
+    else
+        return color(hue, sat, lum);
+}
+function palette(pureColor) {
+    let _hue = hue(pureColor);
+    return {
+        baseColor: pureColor,
+        complementaryColor: color((_hue + 180) % 360, 100, 50),
+        tones: [
+            color(_hue, 20, 50),
+            color(_hue, 40, 50),
+            color(_hue, 60, 50),
+            color(_hue, 80, 50),
+            color(_hue, 90, 50)
+        ],
+        tints: [
+            color(_hue, 100, 60),
+            color(_hue, 100, 70),
+            color(_hue, 100, 80),
+            color(_hue, 100, 90),
+            color(_hue, 100, 95)
+        ],
+        shades: [
+            color(_hue, 100, 10),
+            color(_hue, 100, 20),
+            color(_hue, 100, 30),
+            color(_hue, 100, 40),
+            color(_hue, 100, 45)
+        ]
+    }
+}
