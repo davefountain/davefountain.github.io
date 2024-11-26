@@ -14,7 +14,7 @@ class ColorRaffleBox extends Box {
                     textSize: 20,
                     color: randomColor(),
                     borderWidth: 0,
-                    text : "Color Raffle"  }
+                    text : "Recursive hexagonal color palette"  }
             ]
         }
         let heading = Box.load(arrangement);
@@ -31,17 +31,20 @@ class ColorRaffleBox extends Box {
         let gh = c.height/6;    // Rows
         let gw = c.width/7;     // Cols
 
-        c.push();
-        this.showPalette(c, gh, gw, "Pure", [this.palette.baseColor]);
-        c.translate(0, gh + 5);
-        this.showPalette(c, gh, gw, "Comp", [this.palette.complementaryColor]);
-        c.translate(0, gh + 5);
-        this.showPalette(c, gh, gw, "Tints", this.palette.tints);
-        c.translate(0, gh + 5);
-        this.showPalette(c, gh, gw, "Shades", this.palette.shades);
-        c.translate(0, gh + 5);
-        this.showPalette(c, gh, gw, "Tones", this.palette.tones);
-        c.pop();
+        c.fill(this.pureColor);
+        recursiveHexagon(c, c.width/2, c.height/2, 4, c.width/4);
+
+        // c.push();
+        // this.showPalette(c, gh, gw, "Pure", [this.palette.baseColor]);
+        // c.translate(0, gh + 5);
+        // this.showPalette(c, gh, gw, "Comp", [this.palette.complementaryColor]);
+        // c.translate(0, gh + 5);
+        // this.showPalette(c, gh, gw, "Tints", this.palette.tints);
+        // c.translate(0, gh + 5);
+        // this.showPalette(c, gh, gw, "Shades", this.palette.shades);
+        // c.translate(0, gh + 5);
+        // this.showPalette(c, gh, gw, "Tones", this.palette.tones);
+        // c.pop();
     }
     showPalette(c, gh, gw, txt, palette) {
         c.push();
