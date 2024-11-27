@@ -50,7 +50,6 @@ function draw() {
     balls.update();
     balls.show();
 }
-
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     ui.width = windowWidth;
@@ -58,4 +57,11 @@ function windowResized() {
     ui.repack();
     ui.update();
     ui.show();
+}
+
+function mouseClicked() {
+    ui.mouseClicked(mouseX, mouseY);
+}
+function mouseWheel(event) {
+    ui.mouseWheel(mouseX, mouseY, event);
 }

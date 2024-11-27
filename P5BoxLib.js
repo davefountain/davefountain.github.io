@@ -126,6 +126,42 @@ class Box {
         }
     }
 
+    mouseClicked(x, y) {
+        // If no children, just process the click and exit
+        if (this.children.length === 0) {
+            // console.log(`mouseClicked ${x},${y}`);
+            return;
+        }
+        // Otherwise pass the click to the appropriate child
+        for (let c of this.children) {
+            let l = c.left;
+            let r = c.left + c.width;
+            let t = c.top;
+            let b = c.top + c.height;
+            if (x >= l && x < r && y >= t && y < b) {
+                c.mouseClicked(x - l, y - t);
+            }
+        }
+    }
+
+    mouseWheel(x, y, event) {
+        // If no children, just process the click and exit
+        if (this.children.length === 0) {
+            //console.log(`mouseWheel ${event.delta}`);
+            return;
+        }
+        // Otherwise pass the click to the appropriate child
+        for (let c of this.children) {
+            let l = c.left;
+            let r = c.left + c.width;
+            let t = c.top;
+            let b = c.top + c.height;
+            if (x >= l && x < r && y >= t && y < b) {
+                c.mouseWheel(x - l, y - t, event);
+            }
+        }
+    }
+
     //---------------------------------------------------------------------------
     // Packs all the children of this box into it.  Also repacks every child box.
     //---------------------------------------------------------------------------
@@ -244,37 +280,9 @@ function palette(pureColor) {
     }
 }
 
-// Shape Library
-function drawHexagon(can, cX, cY, r, hexColor){
-    // Based on https://www.gorillasun.de/blog/a-guide-to-hexagonal-grids-in-p5js/
-    can.push();
-    can.fill(hexColor);
-    can.noStroke();
-    can.beginShape();
-    for(let a = 0; a < TAU; a+=TAU/6) {
-        can.vertex(cX + r * cos(a), cY + r * sin(a));
-    }
-    can.endShape(CLOSE);
-    can.pop();
-}
-function recursiveHexagon(can, cX, cY, depth, r) {
-    // Based on https://www.gorillasun.de/blog/a-guide-to-hexagonal-grids-in-p5js/
-    if (depth === 0) {
-        // Draw the actual hexagon using the right color
-        let radToDeg = 180 / PI;
-        let vec = createVector(can.width/2 - cX, can.height/2 - cY);
-        let _hue = vec.heading() * radToDeg + 180;
-        let _lum = map(vec.mag(), 0, can.width/4, 0, 60);
-        let hexColor= color(_hue, 100, _lum);
-        drawHexagon(can, cX, cY, r, hexColor);
-    } else {
-        // One for the middle
-        recursiveHexagon(can, cX, cY, depth - 1, r/2);
-        // One for each side of the parent hexagon
-        for (let angle = 0; angle < TAU; angle+=TAU/6) {
-            let x = cX + r * cos(angle + TAU/12);  // TAU/12 adjustment is to rotate angle from
-            let y = cY + r * sin(angle + TAU/12);  // the vertex to the midpoint of the side
-           recursiveHexagon(can, x, y, depth - 1, r / 2);
-        }
-    }
+// Math functions
+function clamp(val, min, max) {
+    if (val > max) return max;
+    if (val < min) return min;
+    return val;
 }
