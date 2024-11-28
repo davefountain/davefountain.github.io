@@ -3,6 +3,7 @@ class ColorRaffleBox extends Box {
         super();
         this.direction = "TB";
         this.sat = 50;
+        this.clipboard = "";
         // Create and add the Heading subBox
         let headerArrangement = {
             direction: "LR",
@@ -120,5 +121,7 @@ class ColorRaffleBox extends Box {
         this.selection.repack();
         this.selection.update();
         this.selection.show();
+        this.clipboard = this.clipboard + " " + colorString;
+        copyStringToClipboard(this.clipboard);
     }
 }

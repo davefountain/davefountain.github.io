@@ -251,7 +251,6 @@ function randomColor(p1 = "") {
     else
         return color(hue, sat, lum);
 }
-
 function RGBToHex(r,g,b) {
     let _r = r.toString(16);
     let _g = g.toString(16);
@@ -295,4 +294,22 @@ function clamp(val, min, max) {
     if (val > max) return max;
     if (val < min) return min;
     return val;
+}
+
+// Clipboard functions
+function copyStringToClipboard (str) {
+    // From https://editor.p5js.org/olafval/sketches/vmclfZbIB
+    // Create new element and set value (string to be copied)
+    let el = document.createElement('textarea');
+    el.value = str;
+    // Set non-editable to avoid focus and move outside of view
+    el.setAttribute('readonly', '');
+    el.style = {position: 'absolute', left: '-9999px'};
+    document.body.appendChild(el);
+    // Select text inside element
+    el.select();
+    // Copy text to clipboard
+    document.execCommand('copy');
+    // Remove temporary element
+    document.body.removeChild(el);
 }
