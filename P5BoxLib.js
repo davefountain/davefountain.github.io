@@ -251,6 +251,16 @@ function randomColor(p1 = "") {
     else
         return color(hue, sat, lum);
 }
+
+function RGBToHex(r,g,b) {
+    let _r = r.toString(16);
+    let _g = g.toString(16);
+    let _b = b.toString(16);
+    if (_r.length === 1) _r = "0" + _r;
+    if (_g.length === 1) _g = "0" + _g;
+    if (_b.length === 1) _b = "0" + _b;
+    return ("#" + _r + _g + _b).toUpperCase();
+}
 function palette(pureColor) {
     let _hue = hue(pureColor);
     return {

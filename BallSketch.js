@@ -82,6 +82,7 @@ class BallSketch extends Box {
         super();
         this.name = "balls";        // Creates the global variable "balls" to refer to this Box
         this.direction = "TB";
+        this.paused = false;
         // Create and add the Heading subBox
         let arrangement = {
             direction: "LR",
@@ -111,6 +112,10 @@ class BallSketch extends Box {
         this.ballsArray[this.ballMessage.length] = new Ball(30, 30, 4, 3, 45, "!");
     }
     update() {
+
+        // Bail out if we are paused
+        if (this.paused) return;
+
         // Clear canvas
         super.update();
 
@@ -129,5 +134,9 @@ class BallSketch extends Box {
             ball.show(this.sketch.can);
             totalEnergy += ball.energy();
         }
+    }
+
+    mouseClicked(x, y) {
+        this.paused = !this.paused;
     }
 }

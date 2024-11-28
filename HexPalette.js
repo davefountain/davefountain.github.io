@@ -22,6 +22,13 @@ class ColorRaffleBox extends Box {
         this.sketch.borderWidth = 0;
         this.sketch.borderColor = color("grey");
         this.addChild(this.sketch);
+        // Set up the color selection box
+        this.selection = new Box();
+        this.selection.size = 40;
+        this.selection.borderWidth = 0;
+        this.selection.direction = "LR";
+        this.addChild(this.selection);
+        // Set up the footer box
         let footerArrangement = {
             direction: "LR",
             size: 40,  // Height
@@ -57,7 +64,6 @@ class ColorRaffleBox extends Box {
         }
         c.pop();
     }
-
     drawHexagon(cX, cY, r, hexColor){
         // Based on https://www.gorillasun.de/blog/a-guide-to-hexagonal-grids-in-p5js/
         let c = this.sketch.can;
@@ -92,7 +98,6 @@ class ColorRaffleBox extends Box {
             }
         }
     }
-
     mouseWheel(x, y, event) {
         if (event.delta > 0)
             this.sat = clamp(this.sat-5, 0, 100);
@@ -101,5 +106,19 @@ class ColorRaffleBox extends Box {
         this.satBox.text = "Saturation: " + this.sat.toFixed(0);
         this.update();
         this.show();
+    }
+    mouseClicked(x, y) {
+        let c = this.sketch.can;
+        let cA = c.get(x, y - this.children[0].height);
+        let colorString = RGBToHex(cA[0], cA[1], cA[2]);
+        let sBox = new Box();
+        sBox.color = color(colorString);
+        sBox.text = colorString;
+        sBox.textSize = 10;
+        sBox.borderWidth = 0;
+        this.selection.addChild(sBox);
+        this.selection.repack();
+        this.selection.update();
+        this.selection.show();
     }
 }
