@@ -11,9 +11,9 @@ class ColorRaffleBox extends Box {
             children: [
                 {
                     textSize: 20,
-                    color: randomColor(),
+                    color: color("#3473B2"),
                     borderWidth: 0,
-                    text : "Recursive hexagonal color palette"  }
+                    text : "Hexagonal Color Palette"  }
             ]
         }
         let heading = Box.load(headerArrangement);
@@ -21,7 +21,7 @@ class ColorRaffleBox extends Box {
         // Create and add the subBox that we will sketch on
         this.sketch = new Box();
         this.sketch.borderWidth = 0;
-        this.sketch.borderColor = color("grey");
+        //this.sketch.color = color("#FDFBF9");
         this.addChild(this.sketch);
         // Set up the color selection box
         this.selection = new Box();

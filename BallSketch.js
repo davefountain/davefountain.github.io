@@ -4,7 +4,8 @@ class Ball {
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
-        this.color = color(random(360), 80, 50);
+        let pal = ["#E8F3F6","#B3D9E2","#7FC6CE","#4DBCBC","#389382","#2A6F4D","#246024","#4D6F2A","#829338", "#BCBC4D", "#CEC67F", "#E2D9B3", "#F6F3E8"];
+        this.color = color(random(pal));
         this.letter = letter;
     }
     energy() {
@@ -90,9 +91,9 @@ class BallSketch extends Box {
             children: [
                 {
                     textSize: 20,
-                    color: randomColor(),
+                    color: color("#E2D9B3"),
                     borderWidth: 0,
-                    text : "Arrow of Time"  }
+                    text : "Conserved: Energy & Momentum"  }
             ]
         }
         let heading = Box.load(arrangement);
@@ -105,11 +106,12 @@ class BallSketch extends Box {
         this.addChild(this.sketch);
 
         // Populate the balls array
-        this.ballMessage = "Arrow of Time"
+        this.ballMessage = "Pay attention";
         this.ballsArray = [];
         for (let i = 0; i < this.ballMessage.length; i++)
             this.ballsArray[i] = new Ball(i*50 + 25, height / 2, 0, 0, 20, this.ballMessage.slice(i, i+1));
-        this.ballsArray[this.ballMessage.length] = new Ball(30, 30, 4, 3, 45, "!");
+        this.ballsArray.push(new Ball(30, 30, 4, 3, 45, "!"));
+        this.ballsArray[this.ballsArray.length-1].color = color("#4DBCBC");
     }
     update() {
 

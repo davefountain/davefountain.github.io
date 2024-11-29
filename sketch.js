@@ -2,40 +2,41 @@ let ui;
 function setup() {
     createCanvas(windowWidth, windowHeight);
     colorMode(HSL, 360, 100, 100, 100);
+    let bcolor = color("#38384C");
     let arrangement = {
         direction: "TB",
         height: windowHeight,
         width: windowWidth,
         children: [
             {
-                size: 80,
+                size: 120,
                 borderWidth: 0,
                 textSize: 40,
                 textFont: "Georgia",
                 text: "David Fountain",
-                color: color("dimgray")
+                color: bcolor
             },
             {
                 children: [
                     {size: 50,
                         borderWidth: 0,
-                        color: color("dimgray")
+                        color: bcolor
                     },
                     new ColorRaffleBox(),
                     {size: 30,
                      borderWidth: 0,
-                     color: color("dimgray")
+                     color: bcolor
                     },
                     new BallSketch(),
                     {size:50,
                     borderWidth: 0,
-                    color: color("dimgray")
+                    color: bcolor
                     }
                 ]
             },
             {
                 size: 50,
-                color: color("dimgray"),
+                color: bcolor,
                 borderWidth: 0
             }
         ]
