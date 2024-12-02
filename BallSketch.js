@@ -4,7 +4,7 @@ class Ball {
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
-        let pal = ["#E8F3F6","#B3D9E2","#7FC6CE","#4DBCBC","#389382","#2A6F4D","#246024","#4D6F2A","#829338", "#BCBC4D", "#CEC67F", "#E2D9B3", "#F6F3E8"];
+        let pal = ["#7FC6CE","#4DBCBC","#389382","#2A6F4D","#246024","#4D6F2A","#829338", "#BCBC4D", "#CEC67F"];
         this.color = color(random(pal));
         this.letter = letter;
     }
@@ -12,7 +12,7 @@ class Ball {
         return 0.5 * this.mass * sq(this.vel.mag());  // calculate when needed
     }
     momentum() {
-        return p5.Vector.mult(this.vel, this.mass)
+        return p5.Vector.mult(this.vel, this.mass).mult(0.02)
     }
 
     update(canWidth, canHeight) {
@@ -105,12 +105,27 @@ class BallSketch extends Box {
         this.sketch.borderColor = color("grey");
         this.addChild(this.sketch);
 
+        // Set up footer boxes to display energy and momentum
+        this.momentum = new Box();
+        this.momentum.borderWidth = 2;
+        this.momentum.borderColor = color("#264D73");
+        this.momentum.color = color("ivory");
+        this.energy = new Box();
+        this.energy.borderWidth = 0;
+        this.energy.color = color("#6b5998");
+        let footer = new Box();
+        footer.direction = "LR";
+        footer.borderWidth = 0;
+        footer.addChild(this.momentum);
+        footer.addChild(this.energy);
+        this.addChild(footer);
+
         // Populate the balls array
-        this.ballMessage = "Pay attention";
+        this.ballMessage = "MOMENTUM";
         this.ballsArray = [];
         for (let i = 0; i < this.ballMessage.length; i++)
-            this.ballsArray[i] = new Ball(i*50 + 25, height / 2, 0, 0, 20, this.ballMessage.slice(i, i+1));
-        this.ballsArray.push(new Ball(30, 30, 4, 3, 45, "!"));
+            this.ballsArray[i] = new Ball(i*50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i+1));
+        this.ballsArray.push(new Ball(30, 30, 1, 3, 25, "!"));
         this.ballsArray[this.ballsArray.length-1].color = color("#4DBCBC");
     }
     update() {
@@ -136,6 +151,40 @@ class BallSketch extends Box {
             ball.show(this.sketch.can);
             totalEnergy += ball.energy();
         }
+
+        // Show momentum
+        let mc = this.momentum.can;
+        let origin = createVector(mc.width/2, mc.height/2);
+        let startPoint = origin.copy();
+        let endPoint;
+        for (let ball of this.ballsArray) {
+            endPoint = p5.Vector.add(startPoint, ball.momentum());
+            this.arrow(startPoint.x, startPoint.y, endPoint.x, endPoint.y, 3, ball.letter, ball.color);
+            startPoint = endPoint;
+        }
+    }
+    arrow(x1, y1, x2, y2, offset, txt, aColor) {
+        let c = this.momentum.can;
+        c.push()
+        c.fill(aColor);
+        c.strokeWeight(1);
+        c.stroke("gray");
+        c.line(x1,y1,x2,y2)
+        let angle = atan2(y1 - y2, x1 - x2);
+        c.translate(x2, y2);
+        c.rotate(angle - HALF_PI);
+        c.triangle(-offset * 0.6, offset*1.5, offset * 0.6, offset*1.5, 0, 0);
+        // Text background (circle)
+        c.rotate(-PI/2);
+        c.stroke(aColor);
+        c.fill("ivory");
+        c.circle(-15, 0, 12);
+        // Text
+        c.fill(aColor);
+        c.noStroke();
+        c.textSize(9);
+        c.text(txt, -15, 0)
+        c.pop();
     }
 
     mouseClicked(x, y) {
