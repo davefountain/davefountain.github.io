@@ -112,7 +112,7 @@ class BallSketch extends Box {
         this.momentum.color = color("ivory");
         this.energy = new Box();
         this.energy.borderWidth = 0;
-        this.energy.color = color("#6b5998");
+        this.energy.direction = "TB";
         let footer = new Box();
         footer.direction = "LR";
         footer.borderWidth = 0;
@@ -121,12 +121,22 @@ class BallSketch extends Box {
         this.addChild(footer);
 
         // Populate the balls array
-        this.ballMessage = "MOMENTUM";
+        this.ballMessage = "MOMENTUM!";
         this.ballsArray = [];
-        for (let i = 0; i < this.ballMessage.length; i++)
-            this.ballsArray[i] = new Ball(i*50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i+1));
-        this.ballsArray.push(new Ball(30, 30, 1, 3, 25, "!"));
-        this.ballsArray[this.ballsArray.length-1].color = color("#4DBCBC");
+        this.eBox = [];
+        for (let i = 0; i < this.ballMessage.length; i++) {
+            this.ballsArray[i] = new Ball(i * 50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i + 1));
+            let eb = new Box();
+            eb.textColor = color("black");
+            eb.color = this.ballsArray[i].color;
+            eb.borderWidth = 0;
+            this.energy.addChild(eb);
+            this.eBox.push(eb);
+        }
+        this.ballsArray[0].vel.x = 0.2;
+        this.ballsArray[0].vel.y = 5;
+        //this.ballsArray.push(new Ball(30, 30, 1, 3, 25, "!"));
+        //this.ballsArray[this.ballsArray.length-1].color = color("#4DBCBC");
     }
     update() {
 
@@ -154,7 +164,7 @@ class BallSketch extends Box {
 
         // Show momentum
         let mc = this.momentum.can;
-        let origin = createVector(mc.width/2, mc.height/2);
+        let origin = createVector(mc.width/2, mc.height/3);
         let startPoint = origin.copy();
         let endPoint;
         for (let ball of this.ballsArray) {
@@ -162,6 +172,11 @@ class BallSketch extends Box {
             this.arrow(startPoint.x, startPoint.y, endPoint.x, endPoint.y, 3, ball.letter, ball.color);
             startPoint = endPoint;
         }
+        // Show energy
+        for (let i=0; i<this.ballsArray.length; i++) {
+            this.eBox[i].text = `${this.ballsArray[i].letter}: ${this.ballsArray[i].energy().toFixed(2)}`
+        }
+
     }
     arrow(x1, y1, x2, y2, offset, txt, aColor) {
         let c = this.momentum.can;
