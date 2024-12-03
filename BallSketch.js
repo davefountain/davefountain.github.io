@@ -4,7 +4,7 @@ class Ball {
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
-        let pal = ["#7FC6CE","#4DBCBC","#389382","#2A6F4D","#246024","#4D6F2A","#829338", "#BCBC4D", "#CEC67F"];
+        let pal = ["#4D2277","#4D2673","#632163","#632121","#734C26","#636321","#4D7326","#26734C","#216363"];
         this.color = color(random(pal));
         this.letter = letter;
     }
@@ -27,7 +27,7 @@ class Ball {
         can.fill(this.color);
         can.strokeWeight(2);
         can.circle(this.pos.x, this.pos.y, this.r * 2);
-        can.fill("black");
+        can.fill("white");
         can.noStroke();
         can.text(this.letter, this.pos.x, this.pos.y);
         can.pop();
@@ -113,6 +113,11 @@ class BallSketch extends Box {
         this.energy = new Box();
         this.energy.borderWidth = 0;
         this.energy.direction = "TB";
+        let h = new Box();
+        h.text = "Energy";
+        h.borderWidth = 0;
+        h.color = color("#264D73");
+        this.energy.addChild(h);
         let footer = new Box();
         footer.direction = "LR";
         footer.borderWidth = 0;
@@ -127,7 +132,7 @@ class BallSketch extends Box {
         for (let i = 0; i < this.ballMessage.length; i++) {
             this.ballsArray[i] = new Ball(i * 50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i + 1));
             let eb = new Box();
-            eb.textColor = color("black");
+            eb.textColor = color("white");
             eb.color = this.ballsArray[i].color;
             eb.borderWidth = 0;
             this.energy.addChild(eb);
@@ -135,8 +140,12 @@ class BallSketch extends Box {
         }
         this.ballsArray[0].vel.x = 0.2;
         this.ballsArray[0].vel.y = 5;
-        //this.ballsArray.push(new Ball(30, 30, 1, 3, 25, "!"));
-        //this.ballsArray[this.ballsArray.length-1].color = color("#4DBCBC");
+        let t = new Box();
+        t.text = "TOTAL Energy: 0";
+        t.borderWidth = 0;
+        t.color = color("#264D73");
+        this.energy.addChild(t);
+
     }
     update() {
 
