@@ -4,7 +4,7 @@ class Ball {
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
-        this.color = color(random(360), 100, 50);
+        this.color = color(random(180), 100, 50);
         this.letter = letter;
     }
     energy() {
@@ -27,7 +27,7 @@ class Ball {
         //can.drawingContext.shadowColor = color("white");
         can.stroke(this.color);
         can.noFill();
-        can.strokeWeight(2);
+        can.strokeWeight(3);
         can.circle(this.pos.x, this.pos.y, this.r * 2);
         can.fill(this.color);
         can.noStroke();
@@ -93,7 +93,7 @@ class BallSketch extends Box {
             children: [
                 {
                     textSize: 20,
-                    color: color("#E2D9B3"),
+                    color: color("#264D73"),
                     borderWidth: 0,
                     text : "Conserved: Energy & Momentum"  }
             ]
@@ -132,7 +132,7 @@ class BallSketch extends Box {
         this.ballsArray = [];
         this.eBox = [];
         for (let i = 0; i < this.ballMessage.length; i++) {
-            this.ballsArray[i] = new Ball(i * 50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i + 1));
+            this.ballsArray[i] = new Ball(i * 50 + 25, 300, 0, 0, 20-i, this.ballMessage.slice(i, i + 1));
             let eb = new Box();
             eb.textColor = this.ballsArray[i].color;
             eb.color = color("black");
@@ -142,12 +142,12 @@ class BallSketch extends Box {
         }
         this.ballsArray[0].vel.x = 0.2;
         this.ballsArray[0].vel.y = 5;
-        let t = new Box();
-        t.text = "TOTAL Energy: 0";
-        t.textColor = color("white");
-        t.borderWidth = 0;
-        t.color = color("black");
-        this.energy.addChild(t);
+        this.te = new Box();
+        this.te.text = "TOTAL Energy: 0";
+        this.te.textColor = color("white");
+        this.te.borderWidth = 0;
+        this.te.color = color("black");
+        this.energy.addChild(this.te);
 
     }
     update() {
@@ -173,6 +173,7 @@ class BallSketch extends Box {
             ball.show(this.sketch.can);
             totalEnergy += ball.energy();
         }
+        this.te.text = `TOTAL Energy: ${totalEnergy.toFixed(2)}`;
 
         // Show momentum
         let mc = this.momentum.can;
@@ -192,6 +193,7 @@ class BallSketch extends Box {
     }
     arrow(x1, y1, x2, y2, offset, txt, aColor) {
         let c = this.momentum.can;
+        let _dist = -dist(x1, y1, x2, y2) / 2;
         c.push()
         c.fill(aColor);
         c.strokeWeight(1);
@@ -205,15 +207,14 @@ class BallSketch extends Box {
         c.rotate(-PI/2);
         c.stroke(aColor);
         c.fill("black");
-        c.circle(-15, 0, 12);
+        c.circle(_dist, 0, 12);
         // Text
         c.fill(aColor);
         c.noStroke();
         c.textSize(9);
-        c.text(txt, -15, 0)
+        c.text(txt, _dist, 1)
         c.pop();
     }
-
     mouseClicked(x, y) {
         this.paused = !this.paused;
     }
