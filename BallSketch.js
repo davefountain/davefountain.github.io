@@ -4,8 +4,7 @@ class Ball {
         this.vel = createVector(vx, vy);
         this.r = r;
         this.mass = PI * sq(r);
-        let pal = ["#4D2277","#4D2673","#632163","#632121","#734C26","#636321","#4D7326","#26734C","#216363"];
-        this.color = color(random(pal));
+        this.color = color(random(360), 100, 50);
         this.letter = letter;
     }
     energy() {
@@ -23,11 +22,14 @@ class Ball {
     }
     show(can) {
         can.push();
-        can.stroke("black");
-        can.fill(this.color);
+        can.drawingContext.shadowBlur = 15;
+        can.drawingContext.shadowColor = this.color;
+        //can.drawingContext.shadowColor = color("white");
+        can.stroke(this.color);
+        can.noFill();
         can.strokeWeight(2);
         can.circle(this.pos.x, this.pos.y, this.r * 2);
-        can.fill("white");
+        can.fill(this.color);
         can.noStroke();
         can.text(this.letter, this.pos.x, this.pos.y);
         can.pop();
@@ -101,7 +103,7 @@ class BallSketch extends Box {
         // Create and add the subBox that we will sketch on
         this.sketch = new Box();
         this.sketch.borderWidth = 0;
-        this.sketch.color = "ivory";
+        this.sketch.color = "black";
         this.sketch.borderColor = color("grey");
         this.addChild(this.sketch);
 
@@ -109,7 +111,7 @@ class BallSketch extends Box {
         this.momentum = new Box();
         this.momentum.borderWidth = 2;
         this.momentum.borderColor = color("#264D73");
-        this.momentum.color = color("ivory");
+        this.momentum.color = color("black");
         this.energy = new Box();
         this.energy.borderWidth = 0;
         this.energy.direction = "TB";
@@ -132,8 +134,8 @@ class BallSketch extends Box {
         for (let i = 0; i < this.ballMessage.length; i++) {
             this.ballsArray[i] = new Ball(i * 50 + 25, 300, 0, 0, 20, this.ballMessage.slice(i, i + 1));
             let eb = new Box();
-            eb.textColor = color("white");
-            eb.color = this.ballsArray[i].color;
+            eb.textColor = this.ballsArray[i].color;
+            eb.color = color("black");
             eb.borderWidth = 0;
             this.energy.addChild(eb);
             this.eBox.push(eb);
@@ -142,8 +144,9 @@ class BallSketch extends Box {
         this.ballsArray[0].vel.y = 5;
         let t = new Box();
         t.text = "TOTAL Energy: 0";
+        t.textColor = color("white");
         t.borderWidth = 0;
-        t.color = color("#264D73");
+        t.color = color("black");
         this.energy.addChild(t);
 
     }
@@ -192,7 +195,7 @@ class BallSketch extends Box {
         c.push()
         c.fill(aColor);
         c.strokeWeight(1);
-        c.stroke("gray");
+        c.stroke(aColor);
         c.line(x1,y1,x2,y2)
         let angle = atan2(y1 - y2, x1 - x2);
         c.translate(x2, y2);
@@ -201,7 +204,7 @@ class BallSketch extends Box {
         // Text background (circle)
         c.rotate(-PI/2);
         c.stroke(aColor);
-        c.fill("ivory");
+        c.fill("black");
         c.circle(-15, 0, 12);
         // Text
         c.fill(aColor);
