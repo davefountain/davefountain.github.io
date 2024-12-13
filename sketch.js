@@ -18,49 +18,24 @@ function setup() {
             },
             {
                 children: [
-                    {size: 50,
-                        borderWidth: 0,
-                        color: bcolor
-                    },
+                    new Frame(50),
                     new ColorRaffleBox(),
-                    {size: 30,
-                     borderWidth: 0,
-                     color: bcolor
-                    },
+                    new Frame(30),
                     new BallSketch(),
-                    {size:50,
-                    borderWidth: 0,
-                    color: bcolor
-                    }
+                    new Frame(50)
                 ]
             },
-            {size: 30,
-             borderWidth: 0,
-             color: bcolor
-            },
+            new Frame(30),
             {
                 children: [
-                    {size: 50,
-                        borderWidth: 0,
-                        color: bcolor
-                    },
+                    new Frame(50),
                     new VoronoiSketch(),
-                    {size: 30,
-                        borderWidth: 0,
-                        color: bcolor
-                    },
+                    new Frame(30),
                     {},
-                    {size:50,
-                        borderWidth: 0,
-                        color: bcolor
-                    }
+                    new Frame(50)
                 ]
             },
-            {
-                size: 50,
-                color: bcolor,
-                borderWidth: 0
-            }
+            new Frame(50)
         ]
     }
     ui = Box.load(arrangement);
