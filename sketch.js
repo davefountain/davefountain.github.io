@@ -34,6 +34,28 @@ function setup() {
                     }
                 ]
             },
+            {size: 30,
+             borderWidth: 0,
+             color: bcolor
+            },
+            {
+                children: [
+                    {size: 50,
+                        borderWidth: 0,
+                        color: bcolor
+                    },
+                    new VoronoiSketch(),
+                    {size: 30,
+                        borderWidth: 0,
+                        color: bcolor
+                    },
+                    {},
+                    {size:50,
+                        borderWidth: 0,
+                        color: bcolor
+                    }
+                ]
+            },
             {
                 size: 50,
                 color: bcolor,

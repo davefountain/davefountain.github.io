@@ -11,7 +11,7 @@ class Ball {
         return 0.5 * this.mass * sq(this.vel.mag());  // calculate when needed
     }
     momentum() {
-        return p5.Vector.mult(this.vel, this.mass).mult(0.02)
+        return p5.Vector.mult(this.vel, this.mass).mult(0.015)
     }
 
     update(canWidth, canHeight) {
@@ -136,6 +136,7 @@ class BallSketch extends Box {
             let eb = new Box();
             eb.textColor = this.ballsArray[i].color;
             eb.color = color("black");
+            eb.textSize = 10;
             eb.borderWidth = 0;
             this.energy.addChild(eb);
             this.eBox.push(eb);
