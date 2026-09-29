@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" aria-label="Home" title="Home">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+    </a>
+  </header>
+
+  <h1 id="title"></h1>
+  <div id="sketch"></div>
+  <p id="caption"></p>
+  <p id="meta" class="meta"></p>
+
+  <script>
+    const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js';
+
+    const load = src => new Promise((ok, fail) => {
+      const el = document.createElement('script');
+      el.src = src; el.onload = ok; el.onerror = () => fail(src);
+      document.body.append(el);
+    });
+
+    async function run() {
+      const id = new URLSearchParams(location.search).get('id');
+      const sketches = await (await fetch('sketches.json')).json();
+      const s = sketches.find(x => x.id === id);
+      if (!s) { document.getElementById('title').textContent = 'Sketch not found'; return; }
+
+      document.title = s.title;
+      document.getElementById('title').textContent = s.title;
+      document.getElementById('caption').textContent = s.caption;
+      document.getElementById('meta').textContent =
+        [s.date, (s.tags || []).join(', '), s.width && `${s.width}×${s.height}`].filter(Boolean).join(' · ');
+
+      await load(P5_URL);
+      for (const lib of s.libs || []) await load(lib);   // optional extra libraries
+      await load(s.script);
+      new p5(undefined, document.getElementById('sketch')); // starts the global-mode sketch
+    }
+    run().catch(e => document.getElementById('title').textContent = 'Failed to load: ' + e);
+  </script>
+</body>
+</html>

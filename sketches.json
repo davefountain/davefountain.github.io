@@ -1,0 +1,24 @@
+[
+  {
+    "id": "orbits",
+    "title": "Orbits",
+    "caption": "Ten dots circling a centre, each at its own speed.",
+    "date": "2026-09-29",
+    "tags": ["animation", "trig"],
+    "image": "sketches/orbits/thumb.svg",
+    "script": "sketches/orbits/sketch.js",
+    "width": 600,
+    "height": 600
+  },
+  {
+    "id": "lissajous",
+    "title": "Lissajous Trail",
+    "caption": "A single point tracing a 3:2 Lissajous curve, leaving a slowly fading trail behind it.",
+    "date": "2026-09-20",
+    "tags": ["curves", "trails", "trig"],
+    "image": "sketches/lissajous/thumb.svg",
+    "script": "sketches/lissajous/sketch.js",
+    "width": 600,
+    "height": 600
+  }
+]
