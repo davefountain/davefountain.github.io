@@ -13,4 +13,6 @@ article img { width: 100%; display: block; }
 h2 { font-size: 1.15rem; margin: .5rem 0 0; }
 p { margin: .25rem 0; }
 .meta { color: var(--dim); font-size: .875rem; }
-#sketch { margin: 1.5rem 0; overflow-x: auto; }
+canvas { display: block; }
+#sketch { margin: 1.5rem 0; }
+body.sketch { max-width: none; width: fit-content; min-width: min(720px, calc(100vw - 2rem)); }

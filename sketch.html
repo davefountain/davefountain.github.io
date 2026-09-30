@@ -6,7 +6,7 @@
   <title>Sketch</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="sketch">
   <header>
     <a href="index.html" aria-label="Home" title="Home">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
@@ -37,7 +37,7 @@
       document.getElementById('title').textContent = s.title;
       document.getElementById('caption').textContent = s.caption;
       document.getElementById('meta').textContent =
-        [s.date, (s.tags || []).join(', '), s.width && `${s.width}×${s.height}`].filter(Boolean).join(' · ');
+        [s.date, (s.tags || []).join(', ')].filter(Boolean).join(' · ');
 
       await load(P5_URL);
       for (const lib of s.libs || []) await load(lib);   // optional extra libraries
