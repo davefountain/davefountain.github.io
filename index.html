@@ -25,9 +25,11 @@
       document.getElementById('list').innerHTML = sketches.map(s => `
         <article>
           <a href="sketch.html?id=${s.id}"><img src="${s.image}" alt="${s.title}"></a>
-          <h2><a href="sketch.html?id=${s.id}">${s.title}</a></h2>
-          <p>${s.caption}</p>
-          <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
+          <div>
+            <h2><a href="sketch.html?id=${s.id}">${s.title}</a></h2>
+            <p>${s.caption}</p>
+            <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
+          </div>
         </article>`).join('');
     });
   </script>
