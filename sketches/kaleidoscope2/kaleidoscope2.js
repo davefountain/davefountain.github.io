@@ -1,12 +1,14 @@
 function setup() {
 	createCanvas(1280, 720);
+	colorMode(HSB, 255);
+	blendMode(SOFT_LIGHT);
 	angleMode(DEGREES);
-	background(20);
-	frameRate(10);
+	background(235);
+	frameRate(5);
 }
 
 function draw() {
-	let symmetry = 6;
+	let symmetry = 12;
 	// Translate origin to canvas center
 	translate(width / 2, height / 2);
 
@@ -17,7 +19,7 @@ function draw() {
 
 	let angle = 360 / symmetry;
 
-	stroke(random(255), random(150), random(200));
+	stroke(random(255), 255, 200, 99);
 	strokeWeight(random(20));
 	for (let i = 0; i < symmetry; i++) {
 		push();

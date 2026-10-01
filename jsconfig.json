@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-10-01T13:54:57.796",
+  "projectType": "p5js",
+  "include": [
+    "sketches/**/*.js",
+    "include/**/*.js",
+    "import/**/*.js",
+    "common/**/*.js",
+    "include/**/*d.ts",
+    "import/**/*.d.ts",
+    "common/**/*.d.ts",
+    "c:\\Users\\ernma\\.vscode\\extensions\\peterdickx.p5-studio-1.2.8\\assets\\1.11\\p5types\\global.d.ts",
+    "c:\\Users\\ernma\\.vscode\\extensions\\peterdickx.p5-studio-1.2.8\\assets\\1.11\\p5types\\p5helper.d.ts"
+  ]
+}
