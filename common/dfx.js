@@ -39,26 +39,26 @@
 // handling for either category — these are already real, working JS/p5
 // functions, so runCPU just calls them as normal.
 const STDLIB_FUNCTIONS = {
-  float:     'float',
-  floor:     'floor',
-  sin:       'sin',
-  cos:       'cos',
-  tan:       'tan',
-  sqrt:      'sqrt',
-  abs:       'abs',
-  pow:       'pow',
-  exp:       'exp',
-  log:       'log',
-  asin:      'asin',
-  acos:      'acos',
-  atan:      'atan',
-  radians:   'radians',
-  degrees:   'degrees',
-  min:       'min',      // 2-argument float form only — p5's min() also
-  max:       'max',      // accepts arrays/3+ args, which this doesn't validate against
-  lerp:      'mix',      // renamed: p5's lerp(a,b,t) == GLSL's mix(a,b,t)
+  float: 'float',
+  floor: 'floor',
+  sin: 'sin',
+  cos: 'cos',
+  tan: 'tan',
+  sqrt: 'sqrt',
+  abs: 'abs',
+  pow: 'pow',
+  exp: 'exp',
+  log: 'log',
+  asin: 'asin',
+  acos: 'acos',
+  atan: 'atan',
+  radians: 'radians',
+  degrees: 'degrees',
+  min: 'min',      // 2-argument float form only — p5's min() also
+  max: 'max',      // accepts arrays/3+ args, which this doesn't validate against
+  lerp: 'mix',      // renamed: p5's lerp(a,b,t) == GLSL's mix(a,b,t)
   constrain: 'clamp',    // renamed: p5's constrain(x,lo,hi) == GLSL's clamp(x,lo,hi)
-  atan2:     'atan',     // renamed: p5's atan2(y,x) == GLSL's two-argument atan(y,x)
+  atan2: 'atan',     // renamed: p5's atan2(y,x) == GLSL's two-argument atan(y,x)
 };
 
 // ---------- DFX.* builtins: GLSL functions with no JS/p5 equivalent ----------
@@ -418,10 +418,12 @@ class DFX {
   #gpuCanvas = null;
   #fboA = null;
   #fboB = null;
+  #canvasFrame = null;
 
   #ensureGpuCanvas() {
     if (!this.#gpuCanvas) {
       this.#gpuCanvas = createGraphics(1, 1, WEBGL);
+      this.#gpuCanvas.pixelDensity(1);
     }
     return this.#gpuCanvas;
   }
@@ -650,17 +652,25 @@ class DFX {
   // 1 just uses fboA once.
   #runGPUChain(img, chain) {
     let gpuCanvas = this.#ensureGpuCanvas();
+    if (gpuCanvas.width !== img.width || gpuCanvas.height !== img.height) {
+      gpuCanvas.resizeCanvas(img.width, img.height);
+    }
     let [fboA, fboB] = this.#ensureFramebuffers(img.width, img.height);
     let buffers = [fboA, fboB];
 
     let src = img;
     let outIndex = 0;
 
-    for (let filterEntry of chain) {
+    for (let i = 0; i < chain.length; i++) {
+      let filterEntry = chain[i];
+      let isLast = (i === chain.length - 1);
       let compiledShader = this.#getCompiledShader(filterEntry.shaderFunc, filterEntry.uniforms);
-      let outBuffer = buffers[outIndex];
 
-      outBuffer.begin();
+      // Intermediate filters render into a framebuffer. The last one
+      // renders straight onto gpuCanvas itself.
+      let outBuffer = isLast ? null : buffers[outIndex];
+
+      if (outBuffer) outBuffer.begin();
       gpuCanvas.shader(compiledShader);
       compiledShader.setUniform('tex0', src);
       compiledShader.setUniform('resolution', [img.width, img.height]);
@@ -671,22 +681,14 @@ class DFX {
         compiledShader.setUniform(key, filterEntry.uniforms[key]);
       }
       gpuCanvas.noStroke();
-      gpuCanvas.rect(-img.width / 2, -img.height / 2, img.width, img.height); // WEBGL origin is centered
-      outBuffer.end();
+      gpuCanvas.rect(-img.width / 2, -img.height / 2, img.width, img.height);
+      if (outBuffer) outBuffer.end();
 
       src = outBuffer;
       outIndex = 1 - outIndex;
     }
 
-    // Every filter above stayed entirely on the GPU (framebuffer -> next
-    // filter's tex0 input, no CPU involvement) - that's the actual
-    // performance win of chaining. This .get() is the ONE unavoidable
-    // readback, at the very end, because p5's global image() can't
-    // reliably draw a p5.Framebuffer that belongs to a secondary offscreen
-    // WEBGL context (#gpuCanvas here) rather than the main canvas's own
-    // renderer. Cost is the same single readback regardless of chain
-    // length - 1 filter or 5, still exactly one .get() call.
-    return src.get();
+    return gpuCanvas;   // a p5.Graphics: image(result, 0, 0) works as before
   }
 
   // ---------- run: the single public entry point ----------
@@ -695,6 +697,15 @@ class DFX {
   // chain of length 1 immediately, so there's exactly one code path from
   // here on - no separate single-filter/chain logic to keep in sync.
   run(img, filterOrChain, mode) {
+
+    // Shorthand: run(shaderFunc, uniforms, mode) filters the whole canvas
+    // and draws the result straight back onto it.
+    if (typeof img === 'function') {
+      let result = this.run(this.grab(), { shaderFunc: img, uniforms: filterOrChain }, mode);
+      image(result, 0, 0, width, height);
+      return result;
+    }
+
     let chain = Array.isArray(filterOrChain) ? filterOrChain : [filterOrChain];
 
     if (chain.length === 0) {
@@ -733,5 +744,17 @@ class DFX {
     if (mode === 'CPU') return this.#runCPUChain(img, chain);
     if (mode === 'GPU') return this.#runGPUChain(img, chain);
     throw new Error(`DFX: unknown mode '${mode}' - expected "CPU" or "GPU"`);
+  }
+
+  // Copies the main canvas into one reused p5.Image and returns it.
+  grab() {
+    if (!this.#canvasFrame ||
+      this.#canvasFrame.width !== width ||
+      this.#canvasFrame.height !== height) {
+      this.#canvasFrame = createImage(width, height);
+    }
+    this.#canvasFrame.drawingContext.drawImage(drawingContext.canvas, 0, 0, width, height);
+    this.#canvasFrame.setModified(true);
+    return this.#canvasFrame;
   }
 }

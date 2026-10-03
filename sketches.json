@@ -25,7 +25,7 @@
     "tags": [],
     "image": "sketches/qix/qix.png",
     "script": "sketches/qix/qix.js",
-    "libs": ["https://cdnjs.cloudflare.com/ajax/libs/acorn/8.11.3/acorn.min.js", "common/dfx.js"]
+    "libs": ["https://cdnjs.cloudflare.com/ajax/libs/acorn/8.11.3/acorn.min.js", "common/dfx.js", "common/statusbar.js"]
   }
 
 ]

@@ -1,26 +1,25 @@
 function glow(color, x, y, image, uniforms) {
-  let blur = new DFX.ColorVec(0, 0, 0, 0);
-  let total = 0;
+	let blur = new DFX.ColorVec(0, 0, 0, 0);
+	let total = 0;
 
-  for (let ring = 0; ring < 4; ring++) {
-    let dist = uniforms.radius * (float(ring) + 1) / 4;
-    let weight = 1 / (float(ring) + 1);
+	for (let ring = 0; ring < 4; ring++) {
+		let dist = uniforms.radius * (float(ring) + 1) / 4;
+		let weight = 1 / (float(ring) + 1);
 
-    for (let i = 0; i < 8; i++) {
-      let angle = float(i) * 0.785398;   // 2π / 8
-      let sx = x + cos(angle) * dist;
-      let sy = y + sin(angle) * dist;
-      blur = blur.add(image.sample(sx, sy).scale(weight));
-      total += weight;
-    }
-  }
+		for (let i = 0; i < 8; i++) {
+			let angle = float(i) * 0.785398;   // 2π / 8
+			let sx = x + cos(angle) * dist;
+			let sy = y + sin(angle) * dist;
+			blur = blur.add(image.sample(sx, sy).scale(weight));
+			total += weight;
+		}
+	}
 
-  blur = blur.scale(1 / total);
-  return color.add(blur.scale(uniforms.strength));
+	blur = blur.scale(1 / total);
+	return color.add(blur.scale(uniforms.strength));
 }
-// uniforms: { radius: 12, strength: 1.5 }
 
-let qix=new Array();
+let qix = new Array();
 class qik {
 	constructor() {
 		this.p1 = createVector(random(0, width), random(0, height));
@@ -41,13 +40,13 @@ class qik {
 		if (this.p1.y < 0 || this.p1.y > height) this.v1.y = -this.v1.y;
 		if (this.p2.y < 0 || this.p2.y > height) this.v2.y = -this.v2.y;
 		if (this.p3.y < 0 || this.p3.y > height) this.v3.y = -this.v3.y;
-		 beginShape();
-		 bezierVertex(this.p1.x, this.p1.y);
-		 bezierVertex(this.p1.x, this.p1.y);
-		 bezierVertex(this.p2.x, this.p2.y);
-		 bezierVertex(this.p3.x, this.p3.y);
-		 endShape();
-		
+		beginShape();
+		bezierVertex(this.p1.x, this.p1.y);
+		bezierVertex(this.p1.x, this.p1.y);
+		bezierVertex(this.p2.x, this.p2.y);
+		bezierVertex(this.p3.x, this.p3.y);
+		endShape();
+
 		//line(this.p1.x, this.p1.y, this.p2.y, this.p2.x);
 		//line(this.p1.y, this.p1.x, this.p2.x, this.p2.y);
 		//line(this.p1.y, this.p1.x, this.p2.y, this.p2.x);
@@ -65,31 +64,48 @@ class qik {
 }
 
 let dfx;
+let bar;
+let uniforms = { radius: 12, strength: 1.9 };
+
 function setup() {
-  createCanvas(1280, 720);
-  pixelDensity(1);   // keeps get() the same size as the canvas
-  dfx = new DFX();   
-  colorMode(HSL, 359, 100, 100);
-	strokeWeight(2);
+	createCanvas(1280, 720);
+	frame = createImage(width, height);
+	pixelDensity(1);
+	dfx = new DFX();
+	colorMode(HSL, 359, 100, 100);
+	bar = new StatusBar();
+	bar.addFps();
+	bar.addDrawTime();
+	bar.addFreeTime();
+	bar.addPrint();	strokeWeight(2);
+	bar.addPlayPause();
+	bar.addSlider('radius', 0, 30, uniforms, 'radius');
+	bar.addSlider('strength', 0, 4, uniforms, 'strength');
 	noFill();
 	background(0);
 	q = new qik();
 	qix.push(q);
-	for (let i=0; i<49; i++) {
+	for (let i = 0; i < 49; i++) {
 		qix.push(q.clone());
 	}
 }
 
 function draw() {
+	bar.begin();
 	background(0);
-	for (let i=0; i<50; i++) {
-		if (frameCount > i*4)	{
+	for (let i = 0; i < 50; i++) {
+		if (frameCount > i * 4) {
 			qix[i].draw();
 		}
 	}
 
-  // Capture the canvas, run the filter, draw the result back over it
-  let frame = get();
-  let result = dfx.run(frame, { shaderFunc: glow, uniforms: { radius: 12, strength: 1.5 } }, 'GPU');
-  image(result, 0, 0, width, height);
+	// Capture the canvas, run the filter, draw the result back over it
+	//let frame = dfx.grab();
+	//let result = dfx.run(frame, { shaderFunc: glow, uniforms: { radius: 12, strength: 1.9 } }, 'GPU');
+	//image(result, 0, 0, width, height);
+
+	// Shorthand: run(shaderFunc, uniforms, mode) filters the whole canvas
+	dfx.run(glow, uniforms, 'GPU');
+
+	bar.update();
 }
