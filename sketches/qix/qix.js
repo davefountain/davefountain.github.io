@@ -66,6 +66,8 @@ class qik {
 let dfx;
 let bar;
 let uniforms = { radius: 12, strength: 1.9 };
+let mode = 'GPU';
+let timing = { qix: 0, grab: 0, run: 0, image: 0 };
 
 function setup() {
 	createCanvas(1280, 720);
@@ -74,13 +76,20 @@ function setup() {
 	dfx = new DFX();
 	colorMode(HSL, 359, 100, 100);
 	bar = new StatusBar();
+	bar.addToggleButton('GPU', 'CPU', function (flipped) { mode = flipped ? 'CPU' : 'GPU'; });
 	bar.addFps();
 	bar.addDrawTime();
 	bar.addFreeTime();
-	bar.addPrint();	strokeWeight(2);
+	bar.addPrint(); strokeWeight(2);
 	bar.addPlayPause();
 	bar.addSlider('radius', 0, 30, uniforms, 'radius');
 	bar.addSlider('strength', 0, 4, uniforms, 'strength');
+	bar.addLabel(function () {
+		return 'qix ' + timing.qix.toFixed(1) +
+			' grab ' + timing.grab.toFixed(1) +
+			' run ' + timing.run.toFixed(1) +
+			' image ' + timing.image.toFixed(1);
+	});
 	noFill();
 	background(0);
 	q = new qik();
@@ -92,20 +101,30 @@ function setup() {
 
 function draw() {
 	bar.begin();
+	let t0 = performance.now();
 	background(0);
 	for (let i = 0; i < 50; i++) {
 		if (frameCount > i * 4) {
 			qix[i].draw();
 		}
 	}
+	let t1 = performance.now();
+
 
 	// Capture the canvas, run the filter, draw the result back over it
-	//let frame = dfx.grab();
-	//let result = dfx.run(frame, { shaderFunc: glow, uniforms: { radius: 12, strength: 1.9 } }, 'GPU');
-	//image(result, 0, 0, width, height);
+	let frame = dfx.grab();
+	let t2 = performance.now();
+	let result = dfx.run(frame, { shaderFunc: glow, uniforms: uniforms }, 'GPU');
+	let t3 = performance.now();
+	image(result, 0, 0, width, height);
+	let t4 = performance.now();
 
 	// Shorthand: run(shaderFunc, uniforms, mode) filters the whole canvas
-	dfx.run(glow, uniforms, 'GPU');
+	//dfx.run(glow, uniforms, mode);
 
+	timing.qix = t1 - t0;
+	timing.grab = t2 - t1;
+	timing.run = t3 - t2;
+	timing.image = t4 - t3;
 	bar.update();
 }

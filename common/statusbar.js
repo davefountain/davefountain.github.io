@@ -26,12 +26,27 @@ class StatusBar {
         return this;
     }
 
-    addButton(label, func) {
+    makeButton(label) {
         let button = createButton(label);
         button.parent(this.div);
         button.style('margin-left', '12px');
         button.style('vertical-align', 'middle');
-        button.mousePressed(func);
+        return button;
+    }
+
+    addButton(label, func) {
+        this.makeButton(label).mousePressed(func);
+        return this;
+    }
+
+    addToggleButton(label, altLabel, func) {
+        let flipped = false;
+        let button = this.makeButton(label);
+        button.mousePressed(function () {
+            flipped = !flipped;
+            button.html(flipped ? altLabel : label);
+            func(flipped);
+        });
         return this;
     }
 
@@ -84,22 +99,15 @@ class StatusBar {
     }
 
     addPlayPause() {
-        let button = createButton('pause');
-        button.parent(this.div);
-        button.style('margin-left', '12px');
-        button.style('vertical-align', 'middle');
-        button.mousePressed(function () {
-            if (isLooping()) {
+        return this.addToggleButton('pause', 'play', function (flipped) {
+            if (flipped) {
                 noLoop();
-                button.html('play');
             } else {
                 loop();
-                button.html('pause');
             }
         });
-        return this;
     }
-
+    
     begin() {
         this.startTime = performance.now();
     }
