@@ -31,9 +31,16 @@ class StatusBar {
         button.parent(this.div);
         button.style('margin-left', '12px');
         button.style('vertical-align', 'middle');
+
+        button.style('font', 'inherit');            // same monospace 12px as the bar
+        button.style('color', '#ddd');
+        button.style('background', '#333');
+        button.style('border', '1px solid #555');
+        button.style('border-radius', '3px');
+        button.style('padding', '1px 8px');
+        button.style('cursor', 'pointer');
         return button;
     }
-
     addButton(label, func) {
         this.makeButton(label).mousePressed(func);
         return this;
@@ -107,7 +114,7 @@ class StatusBar {
             }
         });
     }
-    
+
     begin() {
         this.startTime = performance.now();
     }
