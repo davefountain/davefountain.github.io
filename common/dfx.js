@@ -754,7 +754,7 @@ class DFX {
       this.#canvasFrame = createImage(width, height);
     }
     this.#canvasFrame.drawingContext.drawImage(drawingContext.canvas, 0, 0, width, height);
-    this.#canvasFrame.setModified(true);
+    //this.#canvasFrame.setModified(true);
     return this.#canvasFrame;
   }
 }
