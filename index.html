@@ -24,9 +24,9 @@
       sketches.sort((a, b) => b.date.localeCompare(a.date)); // newest first
       document.getElementById('list').innerHTML = sketches.map(s => `
         <article>
+          <h2><a href="sketch.html?id=${s.id}">${s.title}</a></h2>
           <a href="sketch.html?id=${s.id}"><img src="${s.image}" alt="${s.title}"></a>
           <div>
-            <h2><a href="sketch.html?id=${s.id}">${s.title}</a></h2>
             <p>${s.caption}</p>
             <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
           </div>

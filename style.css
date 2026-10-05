@@ -2,6 +2,8 @@
     --bg: #fff;
     --fg: #222;
     --dim: #777;
+    --bar-top: #5a5a5a;
+    --bar-bottom: #3c3c3c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -9,6 +11,8 @@
         --bg: #161616;
         --fg: #e6e6e6;
         --dim: #999;
+        --bar-top: #484848;
+        --bar-bottom: #2f2f2f;
     }
 }
 
@@ -27,6 +31,16 @@ a {
 
 header {
     margin-bottom: 2rem;
+}
+
+header.row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bar {
+    flex: 1;
 }
 
 header.top {
@@ -50,39 +64,49 @@ header.top h1 {
     font-size: 1.35rem;
 }
 
-#list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
-    column-gap: 2rem;
-}
-
-article {
-    display: grid;
-    grid-row: span 2;
-    grid-template-rows: subgrid;
-}
-
-/* row 1 = image, row 2 = text, shared across each row of cards */
-article>a {
-    align-self: center;
-}
-
-/* images centred vertically in their row */
-article>div {
-    padding-bottom: 2.5rem;
-}
-
-/* text always starts at the top of its row */
 article img {
     width: 100%;
     display: block;
 }
 
-h2 {
-    font-size: 1.15rem;
-    margin: .5rem 0 0;
+article {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 1rem 1.5rem;
+    margin-bottom: 3rem;
 }
 
+article>div {
+    align-self: start;
+}
+
+/* text to the right of the image, top-aligned */
+h2 {
+    grid-column: 1 / -1;
+}
+
+h2,
+.bar {
+    margin: 0;
+    padding: .5rem .75rem;
+    font-size: 1.15rem;
+    background: linear-gradient(var(--bar-top), var(--bar-bottom));
+    border-radius: 8px;
+    color: #fff;
+}
+
+/* title bar spans image + text */
+h2 a {
+    text-decoration: none;
+}
+
+@media (max-width: 560px) {
+    article {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* phones: text drops below the image */
 p {
     margin: .25rem 0;
 }

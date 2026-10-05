@@ -11,7 +11,7 @@
   {
     "id": "turners",
     "title": "Turners",
-    "caption": "Three rotating points, lines drawn between each pair leading to a mandala-like pattern. The colours are complementary, and the lines are drawn with a low opacity to create a sense of depth.",
+    "caption": "Lines drawn between three rotating points leading to a mandala-like patterns. Complementary colours.  The lines are drawn with a low opacity to create a sense of depth.",
     "date": "May 2026",
     "tags": ["vectors", "complementary colours"],
     "image": "sketches/turners/turners.png",
@@ -20,7 +20,7 @@
     {
     "id": "qix",
     "title": "Qix",
-    "caption": "Inspired by the 1981 arcade game Qix",
+    "caption": "Inspired by the 1981 arcade game Qix.  Curves drawn with bezierVertex.  Uses DFX library to apply a glow filter to the curves.  The statusbar library is used for simple controls and to allow switching between GPU and CPU rendering.",
     "date": "May 2026",
     "tags": [],
     "image": "sketches/qix/qix.png",
