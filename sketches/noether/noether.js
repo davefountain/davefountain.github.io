@@ -1,9 +1,8 @@
-// Conservation demo. Keys: 1-4 boundary mode (use "repeat" for conservation), R reset.
-const MODES = ["bounce", "wrap", "repeat", "forget"];
-const SIM_W = 900;
-const SIM_H = 400;
+const SIM_W = 1280;
+const SIM_H = 520;
 const PANEL_W = SIM_W / 3;
 const PANEL_H = 200;
+let bar; // status bar
 let world;
 let bodies; // fixed order, so the arrow chain doesn't reshuffle (world.bodies gets sorted)
 let scale; // pixels per unit of momentum
@@ -14,27 +13,53 @@ let angX; // fixed x of the zero line in the angular momentum panel, panel coord
 
 function setup() {
 	createCanvas(SIM_W, PANEL_H + SIM_H);
+
+	// Set up the status bar
+	bar = new StatusBar();
+	bar.addFps();
+	bar.addDrawTime();
+	bar.addFreeTime();
+	bar.addPrint(); 
+	bar.addPlayPause();
+	bar.addLabel(function () {return 'collisions: ' + world.collisions.toFixed(0);	});
+
 	world = new World();
 	world.isRunning = true;
 	world.setBoundaryMode("repeat");
 	centre = createVector(SIM_W / 2, SIM_H / 2);
 	reset();
 }
+function draw() {
+	bar.begin();
+	background(20);
+	world.step(SIM_W, SIM_H);
+	push();
+	translate(0, PANEL_H);
+	world.render();
+	pop();
 
-function randomVel() {
-	// small common drift so the total momentum isn't near zero
-	return p5.Vector.random2D().mult(random(1, 3)).add(0.5, 0.3);
+	// Draw the three panels above the simulation
+	push();
+	drawPanelFrame(0, "Linear Momentum");
+	drawPanelFrame(1, "Energy");
+	drawPanelFrame(2, "Angular Momentum");
+	pop();
+	drawEnergyTable();
+	drawAngularPanel();
+	drawMomentumArrows(); // last, so spilled arrows draw over everything
+
+	bar.update();
 }
-
 function reset() {
 	world.clear();
 	bodies = [];
 	for (let i = 0; i < 8; i++) {
 		let pos = createVector(random(50, SIM_W - 50), random(50, SIM_H - 50));
 		let col = color(random(100, 255), random(100, 255), random(100, 255));
-		bodies.push(new Ball(pos, randomVel(), random(10, 25), col));
+		let size = random(20, 30);
+		bodies.push(new Ball(pos, randomVel(), size, col));
 	}
-	let box = new Box(createVector(SIM_W / 2, SIM_H / 2), randomVel(), 80, 40, 0, color(255, 180, 60));
+	let box = new Box(createVector(SIM_W / 2, SIM_H / 2), randomVel(), 100, 50, 0, color(255, 180, 60));
 	bodies.push(box);
 	for (let b of bodies) world.add(b);
 
@@ -53,12 +78,10 @@ function reset() {
 	angScale = 70 / max(abs(totalL), 0.2 * sumL);
 	angX = PANEL_W * 0.63 - (totalL * angScale) / 2;
 }
-
-function keyPressed() {
-	if (key >= "1" && key <= "4") world.setBoundaryMode(MODES[key - 1]);
-	if (key === "r" || key === "R") reset();
+function randomVel() {
+	// small common drift so the total momentum isn't near zero
+	return p5.Vector.random2D().mult(random(0, 2)).add(0.5, 0.3);
 }
-
 function drawArrow(a, b, col, weight) {
 	stroke(col);
 	strokeWeight(weight);
@@ -73,15 +96,15 @@ function drawArrow(a, b, col, weight) {
 	triangle(0, 0, -6, 3, -6, -3);
 	pop();
 }
-
 function drawPanelFrame(i, title) {
 	noStroke();
 	fill(30);
 	rect(i * PANEL_W, 0, PANEL_W, PANEL_H);
 	fill(255);
-	text(title, i * PANEL_W + 10, 20);
+	textSize(14);
+	textAlign(CENTER, CENTER);
+	text(title, i * PANEL_W + PANEL_W / 2, 15);
 }
-
 function drawMomentumArrows() {
 	push();
 	let tail = origin.copy();
@@ -93,13 +116,12 @@ function drawMomentumArrows() {
 	drawArrow(origin, tail, 255, 2);
 	pop();
 }
-
 function drawEnergyTable() {
 	push();
 	let colLin = PANEL_W + 140;
 	let colRot = PANEL_W + 215;
 	let colTot = PANEL_W + 290;
-	let y = 36;
+	let y = 40;
 	textSize(11);
 	noStroke();
 	fill(160);
@@ -135,7 +157,6 @@ function drawEnergyTable() {
 	text((sumLin + sumRot).toFixed(1), colTot, y);
 	pop();
 }
-
 // One row per body; the box gets two (orbital and spin). Positive = clockwise on screen.
 function angularRows() {
 	let rows = [];
@@ -150,23 +171,19 @@ function angularRows() {
 	}
 	return rows;
 }
-
 function drawAngularPanel() {
 	push();
 	let left = 2 * PANEL_W;
 	let x0 = left + angX;
 	textSize(11);
 	noStroke();
-	fill(170);
-	textAlign(RIGHT);
-	text("+ = clockwise", left + PANEL_W - 10, 20);
 	textAlign(LEFT);
 	stroke(80);
 	strokeWeight(1);
 	line(x0, 28, x0, 188);
 
 	let x = x0;
-	let y = 36;
+	let y = 40;
 	for (let r of angularRows()) {
 		let tip = x + r.L * angScale;
 		noStroke();
@@ -182,25 +199,4 @@ function drawAngularPanel() {
 	text("Total", left + 10, y);
 	drawArrow(createVector(x0, y - 4), createVector(x, y - 4), 255, 2);
 	pop();
-}
-
-function draw() {
-	background(20);
-	world.step(SIM_W, SIM_H);
-	push();
-	translate(0, PANEL_H);
-	world.render();
-	fill(255);
-	noStroke();
-	text("mode: " + world.boundaryMode + "  (1-4, R resets)", 10, 20);
-	pop();
-	// panels are drawn after the simulation, so they cover bodies drifting over the top edge
-	push();
-	drawPanelFrame(0, "total momentum");
-	drawPanelFrame(1, "energy");
-	drawPanelFrame(2, "angular momentum");
-	pop();
-	drawEnergyTable();
-	drawAngularPanel();
-	drawMomentumArrows(); // last, so spilled arrows draw over everything
 }

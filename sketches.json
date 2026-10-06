@@ -7,7 +7,7 @@
     "tags": ["physics", "conservation laws"],
     "image": "sketches/noether/noether.png",
     "script": "sketches/noether/noether.js",
-    "libs": ["common/world.js"]
+    "libs": ["common/world.js", "common/statusbar.js"]
   },
   {
     "id": "kaleidoscope2",

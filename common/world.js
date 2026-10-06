@@ -157,6 +157,7 @@ class World {
 	constructor() {
 		this.bodies = [];
 		this.gravity = 0;
+		this.collisions = 0;
 		this.boundaryMode = "repeat";
 		this.busyPercent = 0;
 		this.isRunning = false;
@@ -169,6 +170,7 @@ class World {
 	}
 	clear() {
 		this.bodies.length = 0;
+		this.collisions = 0;
 	}
 	setGravity(g) {
 		this.gravity = g;
@@ -311,6 +313,7 @@ class World {
 		let invMassA = a.isStatic ? 0 : 1 / a.mass;
 		let invMassB = b.isStatic ? 0 : 1 / b.mass;
 		if (invMassA + invMassB === 0) return; // Both static: nothing to resolve
+		this.collisions++;
 		let j = (-(1 + e) * vn) / (invMassA + invMassB);
 		let impulse = p5.Vector.mult(n, j);
 		if (!a.isStatic) a.vel.add(p5.Vector.div(impulse, a.mass));
@@ -332,6 +335,7 @@ class World {
 		let invInertiaBox = box.isStatic ? 0 : sq(rCrossN) / box.inertia;
 		let denom = invMassBall + invMassBox + invInertiaBox;
 		if (denom === 0) return; // Both static: nothing to resolve
+		this.collisions++;
 		let j = (-(1 + e) * vn) / denom;
 		let impulse = p5.Vector.mult(n, j);
 		if (!ball.isStatic) ball.vel.add(p5.Vector.div(impulse, ball.mass));
