@@ -83,8 +83,8 @@ function setup() {
 	bar.addFreeTime();
 	bar.addPrint(); 
 	bar.addPlayPause();
-	bar.addSlider('radius', 0, 30, uniforms, 'radius');
-	bar.addSlider('strength', 0, 4, uniforms, 'strength');
+	bar.addSlider('radius', 10, 0, 30, {obj: uniforms});
+	bar.addSlider('strength', 1, 0, 4, {obj: uniforms});
 
 	// Build an array of qik objects
 	q = new qik();

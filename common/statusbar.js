@@ -57,26 +57,40 @@ class StatusBar {
         return this;
     }
 
-    addSlider(label, min, max, obj, key, step) {
-        let labelSpan = createSpan(label);
+
+    // bar.addSlider('speed', 3, 0, 10);                                  // stored as bar.speed
+    // bar.addSlider('speed', 3, 0, 10, { step: 0.5, label: 'Speed' });   // pick only what you need
+    // bar.addSlider('radius', 12, 0, 30, { obj: uniforms });             // write into your uniforms
+    addSlider(key, init, min, max, options) {
+        options = options || {};
+        let obj = options.obj || this;
+        let step = options.step || 1;
+
+        // decimals needed to show the step exactly: 1 -> 0, 0.5 -> 1, 0.25 -> 2
+        let stepText = String(step);
+        let decimals = stepText.includes('.') ? stepText.split('.')[1].length : 0;
+
+        let labelSpan = createSpan(options.label || key);
         labelSpan.parent(this.div);
         labelSpan.style('margin-left', '12px');
 
-        let slider = createSlider(min, max, obj[key], step || 0);
+        let slider = createSlider(min, max, init, step);
         slider.parent(this.div);
         slider.style('margin', '0 6px');
         slider.style('vertical-align', 'middle');
+        slider.style('width', '60px');
 
-        let valueSpan = createSpan(slider.value().toFixed(2));
+        obj[key] = slider.value();
+
+        let valueSpan = createSpan(slider.value().toFixed(decimals));
         valueSpan.parent(this.div);
 
         slider.input(function () {
             obj[key] = slider.value();
-            valueSpan.html(slider.value().toFixed(2));
+            valueSpan.html(slider.value().toFixed(decimals));
         });
         return this;
     }
-
     // ---------- presets ----------
     addFps() {
         let self = this;
