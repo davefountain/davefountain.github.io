@@ -702,7 +702,13 @@ class DFX {
     // and draws the result straight back onto it.
     if (typeof img === 'function') {
       let result = this.run(this.grab(), { shaderFunc: img, uniforms: filterOrChain }, mode);
+      push();
+      resetMatrix();      // ignore any translate/rotate/scale
+      imageMode(CORNER);  // ignore a stray imageMode(CENTER)
+      noTint();           // ignore a stray tint()
+      blendMode(BLEND);   // ignore a stray blendMode(ADD) or MULTIPLY
       image(result, 0, 0, width, height);
+      pop();
       return result;
     }
 

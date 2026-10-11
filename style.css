@@ -64,6 +64,15 @@ header.top h1 {
     font-size: 1.35rem;
 }
 
+.modes {
+    margin: .5rem 0 0;
+}
+
+.modes a[aria-current] {
+    font-weight: 600;
+    text-decoration: none;
+}
+
 article img {
     width: 100%;
     display: block;

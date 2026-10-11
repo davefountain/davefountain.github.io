@@ -11,6 +11,7 @@
     <div>
       <h1>Dave Fountain</h1>
       <p class="sub">Generative Art and Creative Coding</p>
+      <p class="modes"><a href="?mode=gallery" data-mode="gallery">Gallery</a> &middot; <a href="?mode=workshop" data-mode="workshop">Workshop</a></p>
     </div>
     <a href="https://instagram.com/dave_foun_tain" aria-label="Instagram: dave_foun_tain" title="Instagram">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
@@ -20,7 +21,12 @@
   <main id="list"></main>
 
   <script>
+    // status in sketches.json: "gallery" (default), "workshop", or "private" (never listed)
+    const mode = new URLSearchParams(location.search).get('mode') === 'workshop' ? 'workshop' : 'gallery';
+    document.querySelector(`.modes a[data-mode="${mode}"]`).setAttribute('aria-current', 'page');
+
     fetch('sketches.json').then(r => r.json()).then(sketches => {
+      sketches = sketches.filter(s => (s.status || 'gallery') === mode);
       sketches.sort((a, b) => b.date.localeCompare(a.date)); // newest first
       document.getElementById('list').innerHTML = sketches.map(s => `
         <article>
@@ -30,7 +36,7 @@
             <p>${s.caption}</p>
             <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
           </div>
-        </article>`).join('');
+        </article>`).join('') || '<p class="meta">Nothing here yet.</p>';
     });
   </script>
 </body>

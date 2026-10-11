@@ -113,6 +113,7 @@ function draw() {
 
 	// Shorthand: run(shaderFunc, uniforms, mode) filters the whole canvas
 	dfx.run(glow, uniforms, mode);
+	dfx.run(PosterizeFilter, {levels: 0.5, contrast: 0.5}, "GPU");
 
 	bar.update();
 }
