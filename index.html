@@ -30,12 +30,12 @@
       sketches.sort((a, b) => b.date.localeCompare(a.date)); // newest first
       document.getElementById('list').innerHTML = sketches.map(s => `
         <article>
-          <h2><a href="sketch.html?id=${s.id}">${s.title}</a></h2>
-          <a href="sketch.html?id=${s.id}"><img src="${s.image}" alt="${s.title}"></a>
           <div>
+            <h2><a href="sketch.html?id=${s.id}"><span class="initial">${s.title.slice(0, 1)}</span>${s.title.slice(1)}</a></h2>
             <p>${s.caption}</p>
             <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
           </div>
+          <a href="sketch.html?id=${s.id}"><img src="${s.image}" alt="${s.title}"></a>
         </article>`).join('') || '<p class="meta">Nothing here yet.</p>';
     });
   </script>

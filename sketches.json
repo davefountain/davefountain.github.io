@@ -1,13 +1,13 @@
 [
     {
-    "id": "psychadelicprojection",
+    "id": "psychedelicprojection",
     "status": "workshop",
-    "title": "Psychadelic Projection",
+    "title": "Psychedelic Projection",
     "caption": "Inspired by psychedelic oil projections (liquid light shows).",
     "date": "October 2026",
     "tags": ["rotation", "reflection", "patterns"],
-    "image": "sketches/psychadelicprojection/psychadelicprojection.png",
-    "script": "sketches/psychadelicprojection/psychadelicprojection.js",
+    "image": "sketches/psychedelicprojection/psychedelicprojection.png",
+    "script": "sketches/psychedelicprojection/psychedelicprojection.js",
     "libs": ["https://cdnjs.cloudflare.com/ajax/libs/acorn/8.11.3/acorn.min.js",
              "common/statusbar.js", 
              "common/dfx.js",

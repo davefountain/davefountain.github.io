@@ -8,10 +8,11 @@ function setup() {
     bar = new StatusBar();
     //bar.addToggleButton('Posterize: Off', 'Posterize:On', function() {bar.posterize = !bar.posterize;});
 	bar.addSlider('levels', 10, 0, 20, {step: 2});
-    bar.addSlider('rate', 10, -20, 20);
-    bar.addSlider('stroke_weight', 1, 0, 10);
-    bar.addSlider('opacity', 4, 0, 10);
-    bar.addSlider('rotation', 0, -5, 5);
+    bar.addSlider('rate', -5, -20, 20);
+    bar.addSlider('stroke', 5, 0, 10);
+    bar.addSlider('opacity', 8, 0, 10);
+    bar.addSlider('rotation', -2, -5, 5);
+	bar.addPrint();
 	dfx = new DFX();
 	angleMode(DEGREES);
 	colorMode(HSL, 359, 100, 100);
@@ -37,7 +38,7 @@ function draw() {
 
     // Draw a circle with random color and size
 	fill(frameCount % 6 * 60, 100, 70, bar.opacity / 10);
-	strokeWeight(bar.stroke_weight);
+	strokeWeight(bar.stroke);
 	circle(0, 0, random(100));
 
     // Posterize the canvas if needed

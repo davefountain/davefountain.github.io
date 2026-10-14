@@ -1,25 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
 :root {
-    --bg: #fff;
-    --fg: #222;
-    --dim: #777;
-    --bar-top: #5a5a5a;
-    --bar-bottom: #3c3c3c;
+    --bg: #F3E9D2;  /* vellum */
+    --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    --fg: #2B2118;  /* ink */
+    --link: #2A4D9B;  /* ultramarine */
+    --accent: #C8372D;  /* vermilion */
+    --gold: #C9A227;
+    --font: "Almendra", Georgia, serif;
+    --dim: #6B5B4B;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg: #161616;
-        --fg: #e6e6e6;
-        --dim: #999;
-        --bar-top: #484848;
-        --bar-bottom: #2f2f2f;
+        --bg: #1E1712;
+        --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        --fg: #F3E9D2;
+        --link: #7C9CE0;
+        --accent: #E0584D;
+        --dim: #B5A790;
     }
 }
 
 body {
-    background: var(--bg);
+    background: var(--grain), var(--bg);
     color: var(--fg);
-    font: 16px/1.5 system-ui, sans-serif;
+    font: 1.15rem/1.7 var(--font);
     max-width: 880px;
     margin: 0 auto;
     padding: 2rem 1rem;
@@ -50,18 +56,25 @@ header.top {
 }
 
 h1 {
+    font-family: var(--font);
     font-size: 1.5rem;
+    color: var(--link);
     margin: 0;
 }
 
 header.top h1 {
-    font-size: 2.25rem;
+    font-size: clamp(2.25rem, 8vw, 3rem);
+    font-weight: 700;
     line-height: 1.2;
 }
 
 .sub {
+    font-family: var(--font);
+    font-style: italic;
+    color: var(--accent);
     margin: .25rem 0 0;
-    font-size: 1.35rem;
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 
 .modes {
@@ -74,37 +87,74 @@ header.top h1 {
 }
 
 article img {
-    width: 100%;
     display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
 }
 
 article {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     gap: 1rem 1.5rem;
     margin-bottom: 3rem;
 }
 
-article>div {
-    align-self: start;
+article>div,
+article>a {
+    padding: .9rem 1.1rem;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--link);
+    outline-offset: 3px;
 }
 
-/* text to the right of the image, top-aligned */
-h2 {
-    grid-column: 1 / -1;
+article>div {
+    display: flow-root;  /* contains the floated heading */
 }
+
+/* image frame: image centred inside it */
+article>a {
+    display: flex;
+    align-items: center;
+}
+
 
 h2,
 .bar {
+    font-family: var(--font);
     margin: 0;
-    padding: .5rem .75rem;
-    font-size: 1.15rem;
-    background: linear-gradient(var(--bar-top), var(--bar-bottom));
-    border-radius: 8px;
-    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--accent);
 }
 
-/* title bar spans image + text */
+.bar {
+    padding: 0 0 .1rem;
+    border-bottom: 1px solid var(--gold);
+}
+
+/* sketch title on the home page: runs straight into the caption, so the
+   caption's second line wraps beside the floated initial */
+h2,
+h2 + p {
+    display: inline;
+}
+
+h2 {
+    margin-right: .5rem;
+    line-height: 1.2;
+}
+
+/* illuminated initial */
+.initial {
+    float: left;
+    font-size: 3em;
+    line-height: .8;
+    margin: .05em .1em 0 0;
+    color: var(--link);
+}
+
 h2 a {
     text-decoration: none;
 }
@@ -122,7 +172,7 @@ p {
 
 .meta {
     color: var(--dim);
-    font-size: .875rem;
+    font-size: 1rem;
 }
 
 canvas {
