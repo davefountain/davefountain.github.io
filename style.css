@@ -7,6 +7,9 @@
     --link: #2A4D9B;  /* ultramarine */
     --accent: #C8372D;  /* vermilion */
     --gold: #C9A227;
+    --tint: rgba(243, 233, 210, .25);  /* vellum wash over thumbnails */
+    --edge: rgba(80, 55, 20, .35);     /* aged edges */
+    --blend: multiply;
     --font: "Almendra", Georgia, serif;
     --dim: #6B5B4B;
 }
@@ -18,6 +21,9 @@
         --fg: #F3E9D2;
         --link: #7C9CE0;
         --accent: #E0584D;
+        --tint: rgba(43, 33, 24, .2);
+        --edge: rgba(0, 0, 0, .45);
+        --blend: normal;
         --dim: #B5A790;
     }
 }
@@ -89,8 +95,27 @@ header.top h1 {
 article img {
     display: block;
     width: 100%;
-    max-height: 240px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;  /* scale to fill the 16:9 box, crop the overflow */
+}
+
+.thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 427px;  /* 427 x 240 at full size */
+    aspect-ratio: 16 / 9;
+    line-height: 0;
+}
+
+.thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--grain), var(--tint);
+    box-shadow: inset 0 0 30px var(--edge);
+    mix-blend-mode: var(--blend);
+    pointer-events: none;  /* clicks still reach the link */
 }
 
 article {
@@ -116,6 +141,7 @@ article>div {
 article>a {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 
@@ -149,10 +175,12 @@ h2 {
 /* illuminated initial */
 .initial {
     float: left;
-    font-size: 3em;
+    font-size: 4.3em;  /* about 3 lines tall */
     line-height: .8;
     margin: .05em .1em 0 0;
     color: var(--link);
+    -webkit-text-stroke: 4px var(--gold);  /* gold rim around the letter... */
+    paint-order: stroke fill;              /* ...drawn behind the fill so the letter keeps its weight */
 }
 
 h2 a {

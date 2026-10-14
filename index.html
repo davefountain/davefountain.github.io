@@ -35,7 +35,7 @@
             <p>${s.caption}</p>
             <p class="meta">${s.date} &middot; ${(s.tags || []).join(', ')}</p>
           </div>
-          <a href="sketch.html?id=${s.id}"><img src="${s.image}" alt="${s.title}"></a>
+          <a href="sketch.html?id=${s.id}"><span class="thumb"><img src="${s.image}" alt="${s.title}"></span></a>
         </article>`).join('') || '<p class="meta">Nothing here yet.</p>';
     });
   </script>
