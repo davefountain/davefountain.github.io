@@ -7,6 +7,7 @@
     --link: #2A4D9B;  /* ultramarine */
     --accent: #C8372D;  /* vermilion */
     --gold: #C9A227;
+    --green: #3E8E7E;  /* verdigris */
     --tint: rgba(243, 233, 210, .25);  /* vellum wash over thumbnails */
     --edge: rgba(80, 55, 20, .35);     /* aged edges */
     --blend: multiply;
@@ -57,8 +58,10 @@ header.row {
 
 header.top {
     display: flex;
+    flex-wrap: wrap;  /* on narrow screens the links drop below the title */
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: baseline;  /* links line up with the title text */
+    gap: .5rem 1rem;
 }
 
 h1 {
@@ -84,12 +87,42 @@ header.top h1 {
 }
 
 .modes {
-    margin: .5rem 0 0;
+    margin: 0;
+    font-size: 1.5rem;
+    display: flex;
+    gap: 1rem;  /* space between Gallery, the dot and Workshop */
 }
 
-.modes a[aria-current] {
-    font-weight: 600;
+.modes a {
     text-decoration: none;
+}
+
+.modes a:hover {
+    color: var(--accent);
+}
+
+/* current mode: bold red between two green fleurons, with a gold underline */
+.modes a[aria-current] {
+    color: var(--accent);
+    font-weight: 700;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--gold);
+}
+
+.modes a[aria-current]::before,
+.modes a[aria-current]::after {
+    content: "\2767";  /* rotated floral heart */
+    display: inline-block;
+    color: var(--green);
+}
+
+.modes a[aria-current]::before {
+    margin-right: .4em;
+}
+
+.modes a[aria-current]::after {
+    margin-left: .4em;
+    transform: scaleX(-1);  /* mirror image */
 }
 
 article img {
@@ -120,7 +153,7 @@ article img {
 
 article {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1rem 1.5rem;
     margin-bottom: 3rem;
 }
