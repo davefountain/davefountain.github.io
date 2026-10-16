@@ -1,5 +1,12 @@
+let bar;
 function setup() {
 	createCanvas(1280, 720);
+	bar = new StatusBar();
+	bar.addFps();
+	bar.addDrawTime();
+	bar.addFreeTime();
+	bar.addPrint(); 
+	bar.addPlayPause();
 	colorMode(HSB, 255);
 	blendMode(SOFT_LIGHT);
 	angleMode(DEGREES);
@@ -8,6 +15,7 @@ function setup() {
 }
 
 function draw() {
+	bar.begin();
 	let symmetry = 12;
 	// Translate origin to canvas center
 	translate(width / 2, height / 2);
@@ -29,5 +37,5 @@ function draw() {
 		line(mx, my, pmx, pmy);
 		pop();
 	}
-
+	bar.update();
 }
